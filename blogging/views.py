@@ -26,3 +26,7 @@ def detail_view(request, post_id):
         raise Http404
     context = {'post': post }
     return render(request, 'blogging/detail.html', context)
+
+class BloggingDetailView(DetailView):
+    model = Post
+    template_name = 'blogging/detail.html'
