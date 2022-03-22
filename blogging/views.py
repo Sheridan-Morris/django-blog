@@ -12,11 +12,13 @@ from django.views.generic.detail import DetailView
 #     context = {'posts': posts }
 #     return render(request, 'blogging/list.html', context)
 
+
 class BloggingListView(ListView):
     model = Post
     # queryset = model.objects.filter(published_date__exact != None)
-    queryset = model.objects.order_by('-published_date').exclude(published_date = None)
-    template_name = 'blogging/list.html'
+    queryset = model.objects.order_by("-published_date").exclude(published_date=None)
+    template_name = "blogging/list.html"
+
 
 # def detail_view(request, post_id):
 #     published = Post.objects.exclude(published_date__exact=None)
@@ -27,6 +29,7 @@ class BloggingListView(ListView):
 #     context = {'post': post }
 #     return render(request, 'blogging/detail.html', context)
 
+
 class BloggingDetailView(DetailView):
     model = Post
-    template_name = 'blogging/detail.html'
+    template_name = "blogging/detail.html"
