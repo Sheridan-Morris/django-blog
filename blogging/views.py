@@ -5,12 +5,8 @@ from django.template import loader
 from blogging.models import Post
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-
-# def list_view(request):
-#     published = Post.objects.exclude(published_date__exact = None)
-#     posts = published.order_by('-published_date')
-#     context = {'posts': posts }
-#     return render(request, 'blogging/list.html', context)
+from django.contrib.syndication.views import Feed
+from django.urls import reverse
 
 
 class BloggingListView(ListView):
@@ -20,16 +16,24 @@ class BloggingListView(ListView):
     template_name = "blogging/list.html"
 
 
-# def detail_view(request, post_id):
-#     published = Post.objects.exclude(published_date__exact=None)
-#     try:
-#         post = published.get(pk=post_id)
-#     except Post.DoesNotExist:
-#         raise Http404
-#     context = {'post': post }
-#     return render(request, 'blogging/detail.html', context)
-
-
 class BloggingDetailView(DetailView):
     model = Post
     template_name = "blogging/detail.html"
+
+
+class LatestEntriesFeed(Feed):
+    title = "Blog RSS"
+    link = "/sitenews/"
+    description = "Updates on changes and additions to blog."
+
+    def items(self):
+        return Post.objects.order_by("-published_date")[:5]
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return item.text
+
+    def item_link(self, item):
+        return reverse("blog_detail", args=[item.pk])
