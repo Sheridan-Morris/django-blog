@@ -1,6 +1,6 @@
 # This workflow will run python tests after setup
 
-name: Python application
+name: Tests for Django App
 
 on:
   push:
@@ -11,6 +11,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false  # if an item in the workflow fails, the 'false' attribute tells GH to run the workflow to completion
+      matrix:
+        python-version: [ "3.9.6" ] # insert your version, or a matrix
   
     steps:
-      - run: echo "Hello World!"
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python manage.py migrate
+      - name: Conduct unit tests
+        run: |
+          python manage.py test
