@@ -1,0 +1,17 @@
+# This workflow will lint files either pushed or pull requested
+
+name: Linting
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: psf/black@stable
+        with:
+          options: "--check blogging mysite polling"
+          version: "22.1.0"  # Added version control only because this file might be replicated for class
