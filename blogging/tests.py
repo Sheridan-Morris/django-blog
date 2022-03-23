@@ -74,15 +74,9 @@ class FrontEndTestCase(TestCase):
                 self.assertContains(resp, title)
             else:
                 self.assertEqual(resp.status_code, 404)
-    
+
     def test_rss_feed(self):
         actual_response = self.client.get("/latest/feed/")
-        expected_response = '<rss version='
-        self.assertContains(
-            actual_response,
-            expected_response
-        )
-        self.assertEqual(
-            actual_response.status_code,
-            200
-        )
+        expected_response = "<rss version="
+        self.assertContains(actual_response, expected_response)
+        self.assertEqual(actual_response.status_code, 200)
